@@ -1,92 +1,59 @@
 # Akhilesh Kumar Singh — Portfolio
 
-A fast, zero-build portfolio site for an ITS &amp; tolling maintenance and assurance
-engineer. Static HTML/CSS/JS — no framework, no build step, deploys to GitHub Pages
-in about five minutes.
+Interactive portfolio for an ITS &amp; tolling maintenance and assurance engineer.
+The site is **static and zero-build** — it deploys to GitHub Pages as-is. An
+optional Python service adds a real LangChain RAG recruiter chatbot.
 
 **Live:** _add your URL after deploying_
-**Stack:** HTML5 · modern CSS · vanilla JS (no dependencies) · Google Fonts
-
----
-
-## What's here
 
 ```
-portfolio/
-├── index.html        # the whole site (one page, sectioned)
-├── css/styles.css    # design system + layout
-├── js/main.js        # theme toggle, nav, scroll reveal, stat counters, on-demand CV
-├── assets/           # drop your banner / images here
+akhilesh-portfolio/
+├── index.html                     # homepage — live MLFF tolling simulation, work, timeline, skills
+├── css/
+│   └── case.css                   # shared styles for the case-study pages
+├── js/
+│   └── chatbot.js                 # recruiter chatbot widget (client-side, upgrades to backend)
+├── case-studies/
+│   ├── roadaid-ai.html            # deep dive: computer-vision incident detection
+│   └── tolling-analytics.html     # deep dive: passage analytics & anomaly detection
+├── chatbot-api/                   # OPTIONAL — FastAPI + LangChain RAG backend
+│   ├── app.py
+│   ├── knowledge/akhi.md          # the CV knowledge base the assistant answers from
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── README.md
 └── README.md
 ```
 
-The "Download CV" button opens a clean, print-to-PDF résumé generated from the same
-content — so there's no binary to keep in sync. Replace it with a real PDF link if you
-prefer (`assets/akhilesh-singh-cv.pdf`).
+## What's inside
 
----
+- **Live tolling simulation** (homepage): vehicles pass a gantry, get detected,
+  classified, charged and reconciled in real time. Inject a *silent sensor drift*
+  and watch the assurance layer catch what the road never shows.
+- **Recruiter chatbot** (bottom-right "Ask about Akhi"): answers questions from
+  the CV. Works with no backend; set one URL to upgrade it to the LangChain RAG
+  service in `chatbot-api/`.
+- **Two case studies**: RoadAid AI and the tolling analytics pipeline.
+- **On-the-fly CV**: the "Download CV" button generates a print-to-PDF résumé.
 
 ## Run locally
 
-No tooling needed. Either open `index.html` directly, or serve it:
-
 ```bash
-# Python
-python3 -m http.server 8000
-# then visit http://localhost:8000
+python3 -m http.server 8000     # then open http://localhost:8000
 ```
 
----
+(The chatbot backend is separate — see `chatbot-api/README.md`.)
 
-## Deploy to GitHub Pages (5 minutes)
+## Deploy the site (GitHub Pages)
 
-1. Create a repo, e.g. `akhilesh-portfolio` (or `SINGHL25.github.io` for a root URL).
-2. Push these files to the `main` branch:
-   ```bash
-   git init
-   git add .
-   git commit -m "Portfolio v1"
-   git branch -M main
-   git remote add origin https://github.com/SINGHL25/akhilesh-portfolio.git
-   git push -u origin main
-   ```
-3. Repo → **Settings → Pages** → Source: **Deploy from a branch** → Branch: `main` / `root` → Save.
-4. Your site goes live at `https://SINGHL25.github.io/akhilesh-portfolio/` within a minute or two.
+Push to GitHub, then **Settings → Pages → Deploy from a branch → `main` / root**.
+Live at `https://<user>.github.io/<repo>/`. Full commands are in the project
+setup guide.
 
-### Custom domain (optional)
-Add a `CNAME` file containing your domain (e.g. `akhileshsingh.dev`), point a DNS
-`CNAME` record at `SINGHL25.github.io`, then set the domain under Settings → Pages.
+## Deploy the chatbot (optional)
 
----
-
-## Deploy to Vercel (alternative)
-
-Import the repo at [vercel.com/new](https://vercel.com/new). No framework preset needed —
-it serves the static files as-is. Every push to `main` redeploys automatically.
-
----
-
-## Editing content
-
-Everything is plain HTML in `index.html`, grouped by section with clear comments
-(`<!-- ============ WORK ============ -->` etc.). To change:
-
-- **Numbers/stats** → the `.stats` section (`data-count` drives the count-up animation).
-- **Projects** → `.work__grid` — each `<article class="card">` is one project.
-- **Experience** → the `.timeline` list.
-- **Skills** → `.skills__grid`.
-- **Accent colour** → `--orange` at the top of `css/styles.css`.
-
----
-
-## Roadmap (if you want to grow it)
-
-This v1 is deliberately a single, reliable page. Natural next steps:
-
-- Migrate to **Next.js + Tailwind** for multi-page routing and MDX case studies.
-- Add a **RAG recruiter chatbot** (LangChain + your CV) — ties directly to your DocSage work.
-- Case-study pages for RoadAid AI and the tolling analytics with architecture diagrams.
-- Wire the contact section to a form service (Formspree / a serverless function).
+See `chatbot-api/README.md` — deploy to Render/Railway, then set
+`window.RECRUITER_API_URL` in `index.html` to your `/ask` endpoint.
 
 ---
 

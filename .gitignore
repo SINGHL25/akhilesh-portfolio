@@ -1,0 +1,10 @@
+# Python / backend
+chatbot-api/.env
+chatbot-api/faiss_index/
+chatbot-api/venv/
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+.vscode/

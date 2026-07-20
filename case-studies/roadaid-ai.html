@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RoadAid AI — Real-time incident detection · Akhilesh Kumar Singh</title>
+<meta name="description" content="Case study: a computer-vision system (OpenCV/CNN) that detects road incidents from existing camera infrastructure in seconds, compressing the emergency response window." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/case.css" />
+</head>
+<body>
+<div class="top"><div class="top__inner">
+  <a class="back" href="../index.html">← Back to portfolio</a>
+  <span class="top__brand">A. K. Singh</span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <p class="kicker">Case study · Computer vision</p>
+  <h1>RoadAid AI — catching incidents in seconds, not minutes</h1>
+  <p class="lede">A computer-vision system that watches existing motorway cameras and flags accidents, debris and breakdowns the moment they happen — compressing the window before a secondary incident forms.</p>
+  <div class="meta">
+    <span class="tag">OpenCV</span><span class="tag">CNN</span><span class="tag">TensorFlow</span>
+    <span class="tag">Python</span><span class="tag">IoT</span><span class="tag tag--live">Personal build · GitHub</span>
+  </div>
+</div></header>
+
+<article><div class="wrap">
+
+  <h2>The business problem</h2>
+  <p>On a motorway, the expensive number is not the crash — it's the <strong>time between the crash and someone knowing about it</strong>. Today that detection usually depends on a person: an operator noticing a camera feed, or a driver calling it in. That lag runs to minutes.</p>
+  <p>Minutes matter more than they sound. A stopped vehicle in a live lane forms a queue, and the queue is where the <strong>secondary incident</strong> happens — often worse than the first, because it arrives at speed into stationary traffic. Compress the detection time and you compress the whole response chain: signage, lane closure, responder dispatch.</p>
+  <div class="callout"><strong>The thesis:</strong> the value isn't the detection itself — camera analytics aren't new. The value is the minutes it removes from the front of the incident-response timeline.</div>
+
+  <h2>Architecture</h2>
+  <p>The design goal was deliberately unglamorous: <strong>use the cameras that already exist</strong>. No new roadside capital, no bespoke sensors — just a processing layer on the existing estate.</p>
+  <figure class="figure"><pre>
+  ┌──────────────┐   frames    ┌───────────────┐   detections  ┌────────────────┐
+  │  Existing    │────────────▶│  Inference     │──────────────▶│  Incident      │
+  │  CCTV / ANPR │   (RTSP)    │  CNN classifier│   + bbox      │  workflow /    │
+  │  camera feed │             │  (OpenCV pre-  │   + score     │  operator alert│
+  └──────────────┘             │  processing)   │               └────────────────┘
+                               └───────────────┘                        │
+                                       │  low-confidence / edge cases    ▼
+                                       └────────────────────────▶  human confirm
+  </pre><figcaption>Fig 1 — Frames pulled from existing feeds, classified on the edge, incidents raised into a workflow a human can confirm.</figcaption></figure>
+  <p>OpenCV handles frame capture and pre-processing (resizing, background modelling, region-of-interest masking so the model isn't distracted by irrelevant motion). A CNN classifies each region into normal traffic vs incident categories — stopped vehicle, debris, pedestrian, wrong-way — with a confidence score. Detections above threshold raise an alert; borderline cases route to a human rather than firing automatically.</p>
+  <div class="stackrow">
+    <span class="chip">OpenCV · capture + preprocessing</span>
+    <span class="chip">CNN · classification (TensorFlow)</span>
+    <span class="chip">Confidence gating</span>
+    <span class="chip">Alert / workflow handoff</span>
+  </div>
+
+  <h2>Workflow</h2>
+  <ul>
+    <li><strong>Ingest:</strong> pull frames from an existing feed at a sampling rate that balances latency against compute.</li>
+    <li><strong>Pre-process:</strong> mask to the carriageway, normalise for lighting and weather, subtract static background.</li>
+    <li><strong>Classify:</strong> CNN scores each region of interest; incident classes vs normal flow.</li>
+    <li><strong>Gate:</strong> high-confidence detections alert immediately; low-confidence ones are queued for a human glance, not dropped.</li>
+    <li><strong>Hand off:</strong> a confirmed detection becomes a structured event a control room can act on — not just a pixel highlight.</li>
+  </ul>
+
+  <h2>What was hard</h2>
+  <p>The model was the easy part. The honest lessons were all at the edges:</p>
+  <ul>
+    <li><strong>False positives destroy trust faster than false negatives.</strong> An operator who gets three bad alerts stops looking at the fourth. Tuning the confidence gate — and routing uncertainty to a human instead of the alarm — mattered more than raw accuracy.</li>
+    <li><strong>The world is not the training set.</strong> Rain, glare, night, a camera knocked slightly off-axis — each is a distribution shift. Pre-processing and ROI masking did more for real-world robustness than a bigger model would have.</li>
+    <li><strong>Latency is a budget.</strong> Every stage — capture, preprocess, inference — spends milliseconds you're trying to save. The point of the whole system is speed, so the pipeline has to stay lean.</li>
+  </ul>
+
+  <h2>What I learned</h2>
+  <div class="callout">The recurring lesson of roadside AI: <strong>the detection is solvable; the integration is the project.</strong> A model that fires in a notebook is not a system. A system is the camera estate, the network, the confidence gating, and — above all — a handoff into a workflow a human trusts enough to act on. That last part is where these programs live or die.</div>
+  <p>It also reset my sense of where the barrier actually is. Most operators assume the technical difficulty is high and the organisational lift is low. In practice it's the reverse: the CV is within reach today, and the hard, expensive, multi-year part is the plumbing into operations.</p>
+
+  <h2>Tech stack</h2>
+  <div class="stackrow">
+    <span class="chip">Python</span><span class="chip">OpenCV</span><span class="chip">TensorFlow / Keras</span>
+    <span class="chip">CNN</span><span class="chip">NumPy</span><span class="chip">RTSP / IoT feeds</span>
+  </div>
+
+  <h2>Future improvements</h2>
+  <ul>
+    <li>Track objects across frames (not just per-frame classification) to cut flicker and confirm persistence before alerting.</li>
+    <li>Edge deployment (containerised) so inference runs near the camera rather than shipping frames.</li>
+    <li>A feedback loop: every operator confirm/reject becomes a labelled example that improves the gate.</li>
+  </ul>
+
+  <div class="disclaimer">Note: RoadAid AI is a personal research build to explore the problem space, not a deployment on any operator's live network. Code and detail: github.com/SINGHL25</div>
+
+  <div class="results">
+    <div class="result"><div class="result__num">Seconds</div><div class="result__lbl">Detection latency target vs minutes for human report</div></div>
+    <div class="result"><div class="result__num cyan">0</div><div class="result__lbl">New roadside hardware — runs on existing cameras</div></div>
+    <div class="result"><div class="result__num">Human</div><div class="result__lbl">In the loop by design for low-confidence cases</div></div>
+  </div>
+
+</div></article>
+
+<div class="cta"><div class="wrap">
+  <p style="color:var(--text-2);margin-bottom:18px">Want the technical detail or the code?</p>
+  <a class="btn" href="https://github.com/SINGHL25" target="_blank" rel="noopener">View on GitHub ↗</a>
+  <a class="btn btn--ghost" href="../case-studies/tolling-analytics.html">Next: Tolling analytics →</a>
+</div></div>
+
+<div class="foot">© <span id="y"></span> Akhilesh Kumar Singh · Brisbane, Australia</div>
+<script>
+document.getElementById('y').textContent=new Date().getFullYear();
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+</script>
+</body>
+</html>

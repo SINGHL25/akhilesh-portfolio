@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tolling passage analytics &amp; anomaly detection · Akhilesh Kumar Singh</title>
+<meta name="description" content="Case study: turning billions of tolling passage records into an assurance layer that catches silent classification drift, cutting manual log analysis by ~30%." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/case.css" />
+</head>
+<body>
+<div class="top"><div class="top__inner">
+  <a class="back" href="../index.html">← Back to portfolio</a>
+  <span class="top__brand">A. K. Singh</span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <p class="kicker">Case study · Data &amp; assurance</p>
+  <h1>Finding the fault the road never shows</h1>
+  <p class="lede">Free-flow tolling fails silently. This is how billions of passage records became an assurance layer that catches a classification sensor drifting for days — before it surfaces weeks later as a disputed invoice.</p>
+  <div class="meta">
+    <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Power BI</span>
+    <span class="tag">SQL</span><span class="tag">Anomaly detection</span><span class="tag tag--live">Live network work</span>
+  </div>
+</div></header>
+
+<article><div class="wrap">
+
+  <h2>The business problem</h2>
+  <p>A barrier tolling system is brutally honest: when it breaks, the arm stays down, the driver stops, and the fault reports itself in seconds. <strong>Multi-lane free-flow has no such courtesy.</strong> When a roadside unit drifts out of tolerance, or image quality degrades past the plate reader's limit, or a classification sensor starts mis-binning heavy vehicles, nothing visible happens at the lane. Traffic keeps flowing at 100 km/h. The revenue quietly stops being right.</p>
+  <p>The consequence surfaces weeks downstream, at the invoice — by which point you've lost both the transaction and some of the customer's trust. On a free-flow network the driver can't verify anything at the point of use, so <strong>the assumption that the invoice is correct is the product.</strong></p>
+  <div class="callout"><strong>The core issue:</strong> the failures that matter aren't outages — they're degradations. A drifting RSU, deteriorating image quality, a mis-binning sensor: all of them still report as "up". The system is up. It's also wrong, on every vehicle, until someone goes looking.</div>
+
+  <h2>Why "check the logs" stops working</h2>
+  <p>The instinctive answer is to review the logs. That works for one vehicle. It does not work at scale. On a network of any size, <strong>billions of passage and vehicle-classification records</strong> accumulate. A human reading log files can confirm what happened to a single passage. A human cannot see that one classification sensor has been mis-binning heavy vehicles at a slightly elevated rate for eleven days.</p>
+  <p>That's not a diligence problem you can fix with effort. It's a scale problem, and scale problems need tooling.</p>
+
+  <h2>The pipeline</h2>
+  <figure class="figure"><pre>
+  ┌─────────────┐   raw logs   ┌──────────────┐   features   ┌───────────────┐
+  │  Tolling    │─────────────▶│  Python      │─────────────▶│  Anomaly       │
+  │  logs /     │   (parse,    │  ingest +    │  (rolling    │  detection     │
+  │  passage    │   normalise) │  Pandas      │   ratios,    │  (drift, rate, │
+  │  records    │              │  aggregation │   baselines) │   distribution)│
+  └─────────────┘              └──────────────┘              └───────┬───────┘
+                                                                     │
+                                          ┌──────────────────────────┼───────────┐
+                                          ▼                          ▼           ▼
+                                   ┌─────────────┐          ┌──────────────┐  flag →
+                                   │  Power BI   │          │  RCA input   │  investigate
+                                   │  dashboards │          │  (Maximo)    │
+                                   └─────────────┘          └──────────────┘
+  </pre><figcaption>Fig 1 — From raw logs to features to anomaly detection, feeding both dashboards and the RCA workflow.</figcaption></figure>
+  <p>The log analyser automates the parsing and normalisation of complex tolling logs, then computes rolling baselines over the passage data: classification mix, tag-read rates, exception rates, per-lane distributions. Anything that drifts away from its own baseline — not a fixed threshold, but its <em>own</em> recent history — gets flagged. Power BI turns the same aggregates into performance insight for asset strategy teams; the flags feed straight into root cause analysis.</p>
+  <div class="stackrow">
+    <span class="chip">Python · parsing + Pandas</span>
+    <span class="chip">Rolling baselines</span>
+    <span class="chip">Distribution / drift detection</span>
+    <span class="chip">Power BI</span>
+    <span class="chip">SQL</span>
+  </div>
+
+  <h3>The signal that matters most</h3>
+  <p>For a whole class of free-flow fault, the transaction data is <strong>the only place the fault is visible</strong>. The hardware looks fine. The logs, read one line at a time, look fine. The <em>pattern in the aggregate</em> doesn't — a truck-class ratio quietly sitting well below its expected band is a mis-binning sensor announcing itself, if anything is listening. (The live simulation on the homepage models exactly this.)</p>
+
+  <h2>Results</h2>
+  <div class="results">
+    <div class="result"><div class="result__num">~30%</div><div class="result__lbl">Reduction in manual log-analysis effort</div></div>
+    <div class="result"><div class="result__num cyan">Billions</div><div class="result__lbl">Passage &amp; classification records covered</div></div>
+    <div class="result"><div class="result__num">Days</div><div class="result__lbl">Earlier — drift caught before it hits the invoice</div></div>
+  </div>
+  <p>The headline number is the ~30% cut in manual effort. But the bigger win wasn't the hours saved — it was <strong>seeing patterns that manual review structurally could not surface</strong>, because no human reads eleven days of classification data looking for a two-percent drift.</p>
+
+  <h2>What I learned</h2>
+  <ul>
+    <li><strong>Budget for the pipeline, not just the portal.</strong> The roadside hardware is a procurement exercise with a comparison table. The data-assurance layer behind it decides whether the revenue is right — and it's almost always designed last.</li>
+    <li><strong>RCA that stops at the component isn't RCA.</strong> "Replaced the unit" tells you nothing about the other units drifting the same way. The analytics exist to turn one fault into a question about the whole estate.</li>
+    <li><strong>Anomaly detection beats thresholds.</strong> A fixed limit misses slow drift and cries wolf on legitimate variation. Comparing each signal to its own recent baseline is what catches the quiet failures.</li>
+  </ul>
+
+  <div class="callout">The credibility of the next generation of road pricing — distance-based charging, GNSS tolling, road-user charging as fuel excise declines — rests on today's operators being demonstrably accurate without the driver's supervision. That accuracy is earned in exactly this kind of unglamorous assurance work.</div>
+
+  <h2>Tech stack</h2>
+  <div class="stackrow">
+    <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">NumPy</span>
+    <span class="chip">SQL</span><span class="chip">Power BI</span><span class="chip">Splunk</span><span class="chip">IBM Maximo</span>
+  </div>
+
+  <h2>Future improvements</h2>
+  <ul>
+    <li>Predictive layer: move from "this drifted" to "this is trending toward drift" using the same baselines.</li>
+    <li>Automated RCA prompts — when a flag fires, surface the correlated assets and recent config changes automatically.</li>
+    <li>Tie anomaly flags directly into the CMMS so a detection opens a job with its evidence attached.</li>
+  </ul>
+
+  <div class="disclaimer">Note: figures reflect Akhi's own work as recorded in his CV. No operator, client or vendor is named, and no client-confidential data is reproduced. The homepage simulation is an illustrative model, not real network data.</div>
+
+</div></article>
+
+<div class="cta"><div class="wrap">
+  <p style="color:var(--text-2);margin-bottom:18px">See the live model of this on the homepage.</p>
+  <a class="btn" href="../index.html#live">Run the simulation ↗</a>
+  <a class="btn btn--ghost" href="../case-studies/roadaid-ai.html">← RoadAid AI</a>
+</div></div>
+
+<div class="foot">© <span id="y"></span> Akhilesh Kumar Singh · Brisbane, Australia</div>
+<script>
+document.getElementById('y').textContent=new Date().getFullYear();
+try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+</script>
+</body>
+</html>

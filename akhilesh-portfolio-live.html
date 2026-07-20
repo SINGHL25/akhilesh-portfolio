@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Akhilesh Kumar Singh — ITS &amp; Tolling Engineer · Live Portfolio</title>
+<meta name="description" content="Interactive portfolio: live multi-lane free-flow tolling simulation, real-time assurance dashboards and automated log analysis. Maintenance & assurance engineer, Brisbane." />
+<meta name="author" content="Akhilesh Kumar Singh" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Akhilesh Kumar Singh — Live ITS/Tolling Portfolio" />
+<meta property="og:description" content="Watch a free-flow tolling network run, inject a silent fault, and see the assurance layer catch it." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --orange:#F26522;--orange-soft:#ff8a4d;--cyan:#35C6E0;--green:#3ECF8E;--red:#FF5C5C;--amber:#FFC24B;
+  --bg:#0E1116;--bg-2:#12171F;--panel:#161C26;--panel-2:#1B222D;--line:#242C38;--line-2:#2E3742;
+  --text:#E9ECF1;--text-2:#9AA4B2;--text-3:#6B7684;
+  --maxw:1160px;--pad:24px;--r:14px;--ease:cubic-bezier(.22,.61,.36,1);
+  --dsp:'Archivo',system-ui,sans-serif;--body:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+[data-theme="light"]{
+  --bg:#F4F5F7;--bg-2:#ECEEF2;--panel:#FFFFFF;--panel-2:#F7F8FA;--line:#E1E4EA;--line-2:#D4D8E0;
+  --text:#14181F;--text-2:#4C5563;--text-3:#7A828F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s var(--ease),color .4s var(--ease)}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--orange);color:#0b0d10}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--orange);color:#0b0d10;padding:10px 16px;border-radius:0 0 8px 0;font-weight:600}
+.skip-link:focus{left:0}
+
+.btn{display:inline-flex;align-items:center;gap:.4em;font-family:var(--mono);font-size:14px;font-weight:500;padding:13px 22px;border-radius:10px;border:1px solid var(--line-2);color:var(--text);cursor:pointer;background:transparent;transition:transform .2s var(--ease),background .2s,border-color .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.btn--primary{background:var(--orange);border-color:var(--orange);color:#120a05;font-weight:600}
+.btn--primary:hover{background:var(--orange-soft);border-color:var(--orange-soft)}
+.btn--ghost:hover{border-color:var(--text-2)}
+.btn--sm{padding:9px 16px}
+
+.nav{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+.nav.is-scrolled{border-bottom-color:var(--line)}
+.nav__inner{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
+.nav__brand{display:flex;align-items:center;gap:10px;font-family:var(--dsp);font-weight:800;font-size:17px}
+.nav__mark{width:16px;height:16px;border-radius:3px;background:var(--orange);box-shadow:0 0 0 4px color-mix(in srgb,var(--orange) 22%,transparent)}
+.nav__links{display:flex;gap:24px}
+.nav__links a{font-size:14.5px;color:var(--text-2);transition:color .2s}
+.nav__links a:hover{color:var(--text)}
+.nav__actions{display:flex;align-items:center;gap:12px}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:transparent;cursor:pointer;display:grid;place-items:center}
+.icon-btn__dot{width:15px;height:15px;border-radius:50%;background:radial-gradient(circle at 32% 32%,var(--text) 0 48%,transparent 49%);box-shadow:inset -3px -3px 0 0 var(--bg)}
+.nav__burger{display:none;flex-direction:column;gap:5px;width:40px;height:40px;border:1px solid var(--line-2);border-radius:10px;background:transparent;cursor:pointer;align-items:center;justify-content:center}
+.nav__burger span{width:18px;height:2px;background:var(--text)}
+
+.hero{position:relative;padding:80px 0 40px;overflow:hidden}
+.hero__inner{position:relative;z-index:2;max-width:840px}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--text-2);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.eyebrow__live{color:var(--cyan)}
+.hero__title{font-family:var(--dsp);font-weight:900;line-height:.98;letter-spacing:-.03em;font-size:clamp(2.4rem,6.4vw,4.8rem);margin-bottom:24px}
+.hero__accent{color:var(--orange)}
+.hero__lede{font-size:clamp(1.02rem,2.1vw,1.24rem);color:var(--text-2);max-width:660px;margin-bottom:30px}
+.hero__lede strong{color:var(--text);font-weight:600}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero__meta{font-family:var(--mono);font-size:13px;color:var(--text-3);margin-top:20px}
+.hero__meta a{color:var(--cyan)}
+
+.section-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.05em;color:var(--orange);text-transform:uppercase;margin-bottom:14px}
+.section-title{font-family:var(--dsp);font-weight:800;letter-spacing:-.025em;line-height:1.02;font-size:clamp(1.8rem,4.2vw,3rem);margin-bottom:16px}
+.section-intro{color:var(--text-2);max-width:680px;margin-bottom:34px}
+
+/* ---------- LIVE SIMULATION ---------- */
+.sim{padding:44px 0 90px}
+.sim__frame{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)}
+.sim__bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:var(--panel-2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.sim__bar-left{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--text-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.sim__controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ctrl{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--text-2)}
+.ctrl input[type=range]{accent-color:var(--orange);width:96px}
+.pill-btn{font-family:var(--mono);font-size:12px;padding:7px 13px;border-radius:8px;border:1px solid var(--line-2);background:transparent;color:var(--text);cursor:pointer;transition:.2s}
+.pill-btn:hover{border-color:var(--text-2)}
+.pill-btn.is-active{background:var(--orange);border-color:var(--orange);color:#120a05;font-weight:600}
+.pill-btn.fault{border-color:color-mix(in srgb,var(--red) 55%,var(--line-2))}
+.pill-btn.fault.is-active{background:var(--red);border-color:var(--red);color:#fff}
+
+.sim__canvas-wrap{position:relative;background:linear-gradient(180deg,#0b0e13,#0e1319)}
+[data-theme="light"] .sim__canvas-wrap{background:linear-gradient(180deg,#20262f,#171c24)}
+#road{display:block;width:100%;height:auto}
+.sim__alert{position:absolute;left:18px;bottom:18px;right:18px;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:color-mix(in srgb,var(--red) 16%,#0b0e13);border:1px solid color-mix(in srgb,var(--red) 60%,transparent);font-family:var(--mono);font-size:13px;color:#ffd9d9;opacity:0;transform:translateY(10px);transition:.4s var(--ease);pointer-events:none}
+.sim__alert.show{opacity:1;transform:none}
+.sim__alert b{color:var(--red)}
+
+.hud{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line)}
+.hud__cell{padding:16px 18px;border-right:1px solid var(--line)}
+.hud__cell:last-child{border-right:none}
+.hud__label{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.hud__val{font-family:var(--dsp);font-weight:800;font-size:1.7rem;letter-spacing:-.02em}
+.hud__val small{font-size:.9rem;color:var(--text-2);font-weight:600}
+.hud__val.good{color:var(--green)}.hud__val.warn{color:var(--amber)}.hud__val.bad{color:var(--red)}
+
+.sim__lower{display:grid;grid-template-columns:1.3fr 1fr;gap:0;border-top:1px solid var(--line)}
+.panel{padding:20px 22px}
+.panel--charts{border-right:1px solid var(--line)}
+.panel__title{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);margin-bottom:14px}
+.chart-row{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:center}
+#throughput{width:100%;height:120px;display:block}
+.mix{display:flex;flex-direction:column;gap:9px}
+.mix__item{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;color:var(--text-2)}
+.mix__bar{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.mix__fill{height:100%;border-radius:4px;transition:width .5s var(--ease)}
+.mix__pct{width:38px;text-align:right;color:var(--text)}
+.term{font-family:var(--mono);font-size:12px;line-height:1.7;height:196px;overflow:hidden;background:#0a0d11;border-radius:10px;padding:12px 14px;color:#9fb0c0;border:1px solid var(--line)}
+[data-theme="light"] .term{background:#12171f;color:#9fb0c0}
+.term .ok{color:#5b6b7a}
+.term .flag{color:var(--orange)}
+.term .crit{color:var(--red)}
+.term .ts{color:#465562}
+
+/* ---------- generic sections ---------- */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2);padding:30px 0}
+.stats__grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.stat__num{font-family:var(--dsp);font-weight:900;font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-.02em}
+.stat__label{font-size:13px;color:var(--text-2);line-height:1.35}
+
+.work{padding:80px 0}
+.work__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:26px;transition:border-color .25s,transform .25s}
+.card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.card--feature{grid-column:1 / -1;border-color:color-mix(in srgb,var(--orange) 35%,var(--line))}
+.card__top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.card__kind{font-family:var(--mono);font-size:12px;text-transform:uppercase;color:var(--orange)}
+.card__badge{font-family:var(--mono);font-size:12px;color:var(--text-3);border:1px solid var(--line);border-radius:20px;padding:3px 12px}
+.card__link{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
+.card h3{font-family:var(--dsp);font-weight:700;font-size:1.3rem;margin-bottom:10px;line-height:1.15}
+.card--feature h3{font-size:1.55rem}
+.card p{color:var(--text-2);font-size:15.5px;margin-bottom:12px}
+.card__stack{font-family:var(--mono);font-size:12.5px;color:var(--text-3)}
+
+.experience{padding:20px 0 80px}
+.timeline{list-style:none;margin-top:36px;border-left:2px solid var(--line)}
+.tl{display:grid;grid-template-columns:190px 1fr;gap:28px;padding:0 0 32px 30px;position:relative}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--orange)}
+.tl__date{font-family:var(--mono);font-size:13px;color:var(--text-3)}
+.tl__body h3{font-family:var(--dsp);font-weight:700;font-size:1.22rem;margin-bottom:4px}
+.tl__org{color:var(--cyan);font-size:14px;margin-bottom:8px;font-family:var(--mono)}
+.tl__body p:last-child{color:var(--text-2);font-size:15.5px}
+.edu{margin-top:34px;padding:20px 24px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);font-size:14.5px;color:var(--text-2)}
+.edu strong{color:var(--text)}
+
+.skills{padding:20px 0 80px}
+.skills__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px}
+.skillset{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.skillset h3{font-family:var(--dsp);font-weight:700;font-size:1.1rem;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.skillset ul{list-style:none}
+.skillset li{font-size:14px;color:var(--text-2);padding:6px 0 6px 18px;position:relative}
+.skillset li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;border-radius:1px;background:var(--orange);opacity:.7}
+
+.contact{padding:88px 0;border-top:1px solid var(--line);background:var(--bg-2)}
+.contact__inner{max-width:840px}
+.contact__title{font-family:var(--dsp);font-weight:800;letter-spacing:-.025em;line-height:1.06;font-size:clamp(1.7rem,4vw,2.7rem);margin:12px 0 18px}
+.contact__lede{color:var(--text-2);font-size:1.08rem;margin-bottom:28px;max-width:620px}
+.contact__links{display:flex;flex-wrap:wrap;gap:12px}
+.footer{padding:26px 0;border-top:1px solid var(--line)}
+.footer__inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--text-3)}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.is-in{opacity:1;transform:none}
+
+@media(max-width:960px){
+  .nav__links{display:none}.nav__burger{display:flex}
+  .nav__links.is-open{display:flex;position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px var(--pad) 16px}
+  .nav__links.is-open a{padding:12px 0;border-bottom:1px solid var(--line)}
+  .sim__lower{grid-template-columns:1fr}.panel--charts{border-right:none;border-bottom:1px solid var(--line)}
+  .work__grid{grid-template-columns:1fr}.skills__grid{grid-template-columns:repeat(2,1fr)}
+  .stats__grid{grid-template-columns:repeat(2,1fr);gap:20px}
+  .hud{grid-template-columns:repeat(3,1fr)}.hud__cell:nth-child(3){border-right:none}
+  .tl{grid-template-columns:1fr;gap:6px}
+}
+@media(max-width:560px){
+  body{font-size:16px}.hero{padding:56px 0 30px}
+  .skills__grid{grid-template-columns:1fr}.hud{grid-template-columns:repeat(2,1fr)}
+  .chart-row{grid-template-columns:1fr}.nav__name{display:none}
+  .sim__controls{width:100%;justify-content:flex-start}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a href="#top" class="nav__brand"><span class="nav__mark"></span><span class="nav__name">A. K. Singh</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#live">Live demo</a><a href="#work">Work</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <button id="themeToggle" class="icon-btn" aria-label="Switch theme" title="Switch theme"><span class="icon-btn__dot"></span></button>
+      <a class="btn btn--sm" href="#contact">Get in touch</a>
+    </div>
+    <button id="navToggle" class="nav__burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero__inner">
+    <p class="eyebrow"><span class="eyebrow__live">● live demo below</span> Brisbane, QLD · Australia</p>
+    <h1 class="hero__title">The barrier came down.<br /><span class="hero__accent">The hard part didn't.</span></h1>
+    <p class="hero__lede">I'm <strong>Akhilesh Kumar Singh</strong> — a maintenance &amp; assurance engineer keeping revenue-critical road assets available 24/7 across Victorian, Queensland and New Zealand tolling networks. Below is a working model of the thing I actually do: watch a free-flow network run, inject a silent fault, and see the assurance layer catch it.</p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#live">Run the simulation ↓</a>
+      <a class="btn btn--ghost" href="https://github.com/SINGHL25" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn--ghost" href="#" data-resume>Download CV</a>
+    </div>
+    <p class="hero__meta">Full Australian work rights · Open to relocation · <a href="https://www.linkedin.com/in/akhilesh-kumar-singh-23115836" target="_blank" rel="noopener">LinkedIn</a></p>
+  </div>
+</section>
+
+<!-- LIVE SIMULATION -->
+<section class="sim" id="live">
+  <div class="wrap">
+    <p class="section-eyebrow">01 — Interactive · runs in your browser</p>
+    <h2 class="section-title">A free-flow tolling network, live.</h2>
+    <p class="section-intro">Vehicles pass the gantry at speed. Each is detected, classified, charged and reconciled — no one slows down. Turn up the traffic, then hit <strong>Inject sensor drift</strong>: the road keeps flowing and looks perfectly healthy, but the classification data quietly goes wrong. The assurance layer is watching the <em>data</em>, not the road — so it catches what the lane never shows.</p>
+
+    <div class="sim__frame">
+      <div class="sim__bar">
+        <div class="sim__bar-left"><span class="dot"></span> MLFF-SIM · gantry G-04 · westbound</div>
+        <div class="sim__controls">
+          <label class="ctrl">traffic <input type="range" id="density" min="1" max="10" value="5" /></label>
+          <button class="pill-btn is-active" id="playBtn">❚❚ Pause</button>
+          <button class="pill-btn fault" id="faultBtn">⚠ Inject sensor drift</button>
+        </div>
+      </div>
+
+      <div class="sim__canvas-wrap">
+        <canvas id="road" width="1120" height="300" aria-label="Live tolling simulation"></canvas>
+        <div class="sim__alert" id="alert"><b>◤ SILENT FAULT DETECTED</b><span id="alertText">Classification sensor on lane 2 mis-binning heavy vehicles. Truck ratio 4.1% vs expected ~15%. Flagged from passage data — road still reads healthy.</span></div>
+      </div>
+
+      <div class="hud">
+        <div class="hud__cell"><div class="hud__label">Passages</div><div class="hud__val" id="hPass">0</div></div>
+        <div class="hud__cell"><div class="hud__label">Revenue</div><div class="hud__val" id="hRev">$0</div></div>
+        <div class="hud__cell"><div class="hud__label">Tag-read rate</div><div class="hud__val good" id="hTag">—</div></div>
+        <div class="hud__cell"><div class="hud__label">Exceptions</div><div class="hud__val" id="hExc">0</div></div>
+        <div class="hud__cell"><div class="hud__label">Assurance</div><div class="hud__val good" id="hHealth">NOMINAL</div></div>
+      </div>
+
+      <div class="sim__lower">
+        <div class="panel panel--charts">
+          <div class="panel__title">Live telemetry</div>
+          <div class="chart-row">
+            <div>
+              <canvas id="throughput" width="520" height="120"></canvas>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-3);margin-top:6px">passages / tick · rolling 60</div>
+            </div>
+            <div class="mix" id="mix">
+              <div class="mix__item"><span style="width:52px">Car</span><span class="mix__bar"><span class="mix__fill" style="background:var(--cyan)" id="mCar"></span></span><span class="mix__pct" id="pCar">0%</span></div>
+              <div class="mix__item"><span style="width:52px">Truck</span><span class="mix__bar"><span class="mix__fill" style="background:var(--orange)" id="mTruck"></span></span><span class="mix__pct" id="pTruck">0%</span></div>
+              <div class="mix__item"><span style="width:52px">Bike</span><span class="mix__bar"><span class="mix__fill" style="background:var(--green)" id="mBike"></span></span><span class="mix__pct" id="pBike">0%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel__title">Automated log analyser · anomaly stream</div>
+          <div class="term" id="term"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap stats__grid">
+    <div><div class="stat__num" data-count="14" data-suffix="+">0</div><div class="stat__label">Years in engineering</div></div>
+    <div><div class="stat__num" data-count="9" data-suffix="+">0</div><div class="stat__label">Tolling points monitored daily</div></div>
+    <div><div class="stat__num" data-static>Billions</div><div class="stat__label">Passage records analysed</div></div>
+    <div><div class="stat__num" data-count="80" data-suffix="%">0</div><div class="stat__label">Field-complaint reduction (Tritium)</div></div>
+    <div><div class="stat__num" data-count="30" data-prefix="~" data-suffix="%">0</div><div class="stat__label">Manual log analysis cut, via Python</div></div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="wrap">
+    <p class="section-eyebrow">02 — Selected work</p>
+    <h2 class="section-title">Things I've built and run.</h2>
+    <div class="work__grid">
+      <article class="card card--feature">
+        <div class="card__top"><span class="card__kind">Assurance · Live network</span><span class="card__badge">Kapsch · Transurban networks</span></div>
+        <h3>Tolling maintenance assurance across VIC, QLD &amp; NZ</h3>
+        <p>End-to-end maintenance assurance for tolling infrastructure across 9+ tolling points — daily health checks, condition monitoring, RCA using Maximo, Splunk, EVA and Glide, and the technical interface between the operator's ITS team and field crews. 24/7 availability of revenue-critical systems.</p>
+        <p class="card__stack">IBM Maximo · Splunk · Grafana · RCA (5 Whys / fishbone) · SLA management</p>
+      </article>
+      <article class="card">
+        <div class="card__top"><span class="card__kind">Data · Power BI + Python</span></div>
+        <h3>Passage &amp; classification analytics</h3>
+        <p>Power BI dashboards and Python analytics over billions of passage and vehicle-classification records — cutting manual log analysis effort by ~30% and surfacing drift the naked eye can't.</p>
+        <p class="card__stack">Python · Pandas · Power BI · SQL</p>
+      </article>
+      <article class="card">
+        <div class="card__top"><span class="card__kind">Computer vision · Personal build</span><a class="card__link" href="https://github.com/SINGHL25" target="_blank" rel="noopener">GitHub ↗</a></div>
+        <h3>RoadAid AI — real-time incident detection</h3>
+        <p>Computer vision (OpenCV / CNN) on existing camera infrastructure to detect accidents, debris and breakdowns in seconds — compressing the response window before a secondary incident forms.</p>
+        <p class="card__stack">OpenCV · CNN · TensorFlow · IoT</p>
+      </article>
+      <article class="card">
+        <div class="card__top"><span class="card__kind">LLM / RAG · Personal build</span><a class="card__link" href="https://github.com/SINGHL25" target="_blank" rel="noopener">GitHub ↗</a></div>
+        <h3>DocSage AI — O&amp;M document assistant</h3>
+        <p>A LangChain assistant that reads SOPs and O&amp;M manuals and answers technical questions against them — cutting diagnosis time at 2am and flattening the onboarding curve.</p>
+        <p class="card__stack">LangChain · RAG · Python · Streamlit</p>
+      </article>
+      <article class="card">
+        <div class="card__top"><span class="card__kind">Quality · EV charging</span><span class="card__badge">Tritium</span></div>
+        <h3>CS3 quality work package — 80% fewer complaints</h3>
+        <p>Owned the CS3 quality work package across production and field returns — an 80% reduction in field complaints through layered process audits, failure-mode investigation and corrective action.</p>
+        <p class="card__stack">Layered process audits · FMEA · ISO · Lean Six Sigma</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="wrap">
+    <p class="section-eyebrow">03 — Track record</p>
+    <h2 class="section-title">Fourteen years, two countries.</h2>
+    <ol class="timeline">
+      <li class="tl"><span class="tl__date">Jan 2024 — Now</span><div class="tl__body"><h3>Maintenance Specialist — ITS &amp; Tolling</h3><p class="tl__org">Kapsch TrafficCom Australia · Brisbane (VIC, QLD &amp; NZ networks)</p><p>Maintenance assurance for tolling infrastructure; RCA, condition monitoring, Power BI &amp; Python analytics, contractor technical direction, back-office transaction validation.</p></div></li>
+      <li class="tl"><span class="tl__date">Aug 2023 — Jan 2024</span><div class="tl__body"><h3>Technical Support Engineer — EV Charging</h3><p class="tl__org">Tritium · Brisbane</p><p>Global L2/L3 support for 50–175 kW DC fast chargers; hardware/software escalations with Wireshark and Grafana; documentation improving first-time-fix rates.</p></div></li>
+      <li class="tl"><span class="tl__date">Dec 2021 — Jul 2023</span><div class="tl__body"><h3>Quality Inspector — EV Charger Systems</h3><p class="tl__org">Tritium · Brisbane</p><p>Owned the CS3 quality work package — 80% reduction in field complaints via layered process audits and corrective action.</p></div></li>
+      <li class="tl"><span class="tl__date">2012 — 2021</span><div class="tl__body"><h3>Electrical Engineering &amp; Founder roles — India</h3><p class="tl__org">EMAAR MGF · Sahara Prime City · GOMA Foods &amp; Mercado</p><p>33/11 kV substations, HV/LV distribution, HVAC and fire systems on high-rise and township projects; then co-founded and ran two ventures owning operations, procurement and P&amp;L.</p></div></li>
+    </ol>
+    <div class="edu"><p><strong>Executive MBA (Finance)</strong> — IIM Calcutta, 2015 &nbsp;·&nbsp; <strong>B.Tech, Electrical Engineering</strong> — UPTU, 2012 &nbsp;·&nbsp; Lean Six Sigma Green Belt</p></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills" id="skills">
+  <div class="wrap">
+    <p class="section-eyebrow">04 — Capability</p>
+    <h2 class="section-title">What I bring to a team.</h2>
+    <div class="skills__grid">
+      <div class="skillset"><h3>Tolling &amp; ITS</h3><ul><li>Multi-Lane Free-Flow (MLFF)</li><li>GNSS tolling · DSRC · RSU</li><li>ANPR / image processing</li><li>C-ITS (V2X) · CAV</li><li>Back &amp; commercial back office</li><li>Trip building · transactions</li></ul></div>
+      <div class="skillset"><h3>Maintenance &amp; assurance</h3><ul><li>Preventive · corrective · predictive</li><li>Root cause analysis</li><li>Condition monitoring · reliability</li><li>IBM Maximo · CMMS</li><li>Incident management · SLA</li><li>SFAIRP · O&amp;M documentation</li></ul></div>
+      <div class="skillset"><h3>Data, AI &amp; cloud</h3><ul><li>Python · Pandas · NumPy</li><li>Machine learning · CNN · TensorFlow</li><li>Computer vision (OpenCV)</li><li>LangChain · RAG · LLMs</li><li>Power BI · SQL · Splunk · Grafana</li><li>Docker · Kubernetes · Azure · AWS</li></ul></div>
+      <div class="skillset"><h3>Electrical</h3><ul><li>33/11 kV substations</li><li>HV/LV distribution</li><li>EV DC fast charging (50–175 kW)</li><li>HVAC &amp; fire systems</li><li>Electrical safety</li><li>Engineering sign-off</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap contact__inner">
+    <p class="section-eyebrow">05 — Contact</p>
+    <h2 class="contact__title">If a single tolling point began degrading tomorrow —<br />how long until you found out?</h2>
+    <p class="contact__lede">Open to senior maintenance, reliability and ITS engineering roles across Australia. Brisbane-based, open to relocation.</p>
+    <div class="contact__links">
+      <a class="btn btn--primary" href="mailto:akhi.singh1989@gmail.com">akhi.singh1989@gmail.com</a>
+      <a class="btn btn--ghost" href="https://www.linkedin.com/in/akhilesh-kumar-singh-23115836" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn btn--ghost" href="https://github.com/SINGHL25" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>© <span id="year"></span> Akhilesh Kumar Singh · Brisbane, Australia</span>
+    <span>Single-file interactive portfolio · everything runs client-side</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var $ = function(id){return document.getElementById(id);};
+
+/* year, nav, theme */
+$('year').textContent = new Date().getFullYear();
+var root=document.documentElement, stored=null;
+try{stored=localStorage.getItem('theme');}catch(e){}
+if(stored) root.setAttribute('data-theme',stored);
+$('themeToggle').addEventListener('click',function(){
+  var n=root.getAttribute('data-theme')==='dark'?'light':'dark';
+  root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}
+});
+var nav=$('nav');
+window.addEventListener('scroll',function(){nav.classList.toggle('is-scrolled',window.scrollY>8);},{passive:true});
+var burger=$('navToggle'), links=document.querySelector('.nav__links');
+burger.addEventListener('click',function(){var o=links.classList.toggle('is-open');burger.setAttribute('aria-expanded',o?'true':'false');});
+links.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){links.classList.remove('is-open');});});
+
+/* reveal */
+var rt=document.querySelectorAll('.section-title,.section-intro,.card,.tl,.skillset,.contact__title');
+rt.forEach(function(e){e.classList.add('reveal');});
+if(!reduce && 'IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('is-in');io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  rt.forEach(function(e){io.observe(e);});
+}else{rt.forEach(function(e){e.classList.add('is-in');});}
+
+/* stat counters */
+var counters=document.querySelectorAll('.stat__num[data-count]');
+function count(el){var t=parseInt(el.getAttribute('data-count'),10),pre=el.getAttribute('data-prefix')||'',suf=el.getAttribute('data-suffix')||'';
+  if(reduce){el.textContent=pre+t+suf;return;}var d=1100,s=null;
+  function step(n){if(!s)s=n;var p=Math.min((n-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(t*e)+suf;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+if('IntersectionObserver' in window){var cio=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){count(x.target);cio.unobserve(x.target);}});},{threshold:.6});counters.forEach(function(c){cio.observe(c);});}
+else counters.forEach(count);
+
+/* ---- CV ---- */
+document.querySelectorAll('[data-resume]').forEach(function(l){l.addEventListener('click',function(e){e.preventDefault();var w=window.open('','_blank');if(!w)return;w.document.write(RESUME);w.document.close();});});
+var RESUME='<!doctype html><meta charset=utf-8><title>Akhilesh Kumar Singh — CV</title><style>body{font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;color:#14181f;max-width:800px;margin:40px auto;padding:0 24px}h1{font-size:26px;margin:0}h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#F26522;border-bottom:1px solid #ddd;padding-bottom:4px;margin:24px 0 10px}h3{font-size:15px;margin:12px 0 2px}.m{color:#556}ul{margin:6px 0 0;padding-left:18px}button{background:#F26522;color:#fff;border:0;padding:10px 18px;border-radius:8px;cursor:pointer;margin:18px 0}@media print{button{display:none}}</style>'
++'<button onclick=window.print()>Save as PDF</button><h1>Akhilesh Kumar Singh</h1>'
++'<p class=m>Maintenance &amp; Assurance Engineer — ITS &amp; Tolling · Brisbane, QLD · +61 478 504 321 · akhi.singh1989@gmail.com · linkedin.com/in/akhilesh-kumar-singh-23115836 · github.com/SINGHL25 · Work rights (482, to Feb 2028)</p>'
++'<h2>Summary</h2><p>14+ years across intelligent transport systems, tolling, EV charging and electrical infrastructure. Maintenance assurance for tolling networks across VIC, QLD and NZ — 24/7 availability of revenue-critical assets. 80% reduction in field complaints at Tritium; ~30% cut in manual fault-analysis effort via Python.</p>'
++'<h2>Experience</h2><h3>Maintenance Specialist — ITS &amp; Tolling · Kapsch TrafficCom <span class=m>(Jan 2024 – Present)</span></h3><ul><li>Maintenance assurance across West Gate Tunnel, Gateway/Logan Motorways, NZ networks — 9+ tolling points.</li><li>Power BI &amp; Python analytics over billions of passage records; ~30% cut in manual log analysis.</li><li>RCA (Maximo, Splunk, EVA, Glide); technical direction to field crews; back-office transaction validation.</li></ul>'
++'<h3>Technical Support Engineer — EV Charging · Tritium <span class=m>(Aug 2023 – Jan 2024)</span></h3><ul><li>Global L2/L3 support for 50–175 kW DC fast chargers; Wireshark/Grafana diagnostics.</li></ul>'
++'<h3>Quality Inspector · Tritium <span class=m>(Dec 2021 – Jul 2023)</span></h3><ul><li>Owned CS3 quality package — 80% reduction in field complaints.</li></ul>'
++'<h3>Electrical Engineering &amp; Founder roles · India <span class=m>(2012 – 2021)</span></h3><ul><li>33/11 kV substations, HV/LV, HVAC/fire on high-rise &amp; township projects; co-founded two ventures.</li></ul>'
++'<h2>Selected builds</h2><ul><li><b>RoadAid AI</b> — computer vision (OpenCV/CNN) for real-time incident detection.</li><li><b>DocSage AI</b> — LangChain assistant over SOP/O&amp;M documents.</li><li><b>Tolling log analyser</b> — Python anomaly detection across tolling logs.</li></ul>'
++'<h2>Skills</h2><p>MLFF · GNSS · ANPR · DSRC · C-ITS · back office · IBM Maximo · Splunk · Power BI · RCA · Python · ML/CNN · OpenCV · LangChain · Docker/Kubernetes · Azure · AWS · 33/11 kV · HV/LV · EV DC fast charging.</p>'
++'<h2>Education</h2><p>Executive MBA (Finance), IIM Calcutta, 2015 · B.Tech Electrical Engineering, UPTU, 2012 · Lean Six Sigma Green Belt.</p>';
+
+/* ==========================================================
+   LIVE MLFF SIMULATION
+   ========================================================== */
+var cv=$('road'), ctx=cv.getContext('2d');
+var css=getComputedStyle(document.documentElement);
+function col(n){return css.getPropertyValue(n).trim()||'#888';}
+var C={orange:col('--orange'),cyan:col('--cyan'),green:col('--green'),red:col('--red'),amber:col('--amber'),text3:'#6B7684'};
+
+var W=1120,H=300,LANES=3;
+function laneY(i){return 78 + i*((H-100)/LANES) + ((H-100)/LANES)/2;}
+var gantryX=W*0.62;
+
+var vehicles=[], running=true, drift=false, density=5, tick=0;
+var stats={pass:0,rev:0,tagReads:0,exc:0,car:0,truck:0,bike:0,truckSeen:0};
+var history=new Array(60).fill(0), tickPass=0;
+var driftStreak=0, alertOn=false;
+
+function spawn(){
+  var r=Math.random(), type= r<0.18?'truck': r<0.30?'bike':'car';
+  var lane=Math.floor(Math.random()*LANES);
+  var speed=(type==='truck'?1.7:type==='bike'?3.0:2.4)+Math.random()*0.7;
+  vehicles.push({x:-40,lane:lane,type:type,speed:speed,tag:Math.random()<0.86,done:false,flash:0});
+}
+function step(){
+  tick++;
+  // spawn based on density
+  if(Math.random() < density*0.034*(vehicles.length<80?1:0.3)) spawn();
+  for(var i=vehicles.length-1;i>=0;i--){
+    var v=vehicles[i]; v.x+=v.speed*(reduce?1.0:2.3);
+    if(!v.done && v.x>=gantryX){
+      v.done=true; v.flash=1;
+      // detection + classification
+      stats.pass++; tickPass++;
+      var toll = v.type==='truck'?4.35 : v.type==='bike'?0.95 : 1.85;
+      // drift: heavy vehicles mis-binned as car -> undercharge + classification wrong
+      var reported=v.type;
+      if(drift && v.type==='truck' && Math.random()<0.8){ reported='car'; toll=1.85; }
+      stats.rev += toll;
+      if(reported==='truck')stats.truck++; else if(reported==='bike')stats.bike++; else stats.car++;
+      if(v.type==='truck')stats.truckSeen++;
+      if(v.tag)stats.tagReads++;
+      // exception: no tag AND (random plate fail) OR drift mismatch
+      if((!v.tag && Math.random()<0.35) || (drift && v.type==='truck' && reported==='car' && Math.random()<0.5)){stats.exc++;logLine(v,reported,true);}
+      else if(Math.random()<0.06) logLine(v,reported,false);
+    }
+    if(v.flash>0)v.flash-=0.06;
+    if(v.x>W+50)vehicles.splice(i,1);
+  }
+  // throughput history each ~15 ticks
+  if(tick%15===0){history.push(tickPass);history.shift();tickPass=0;}
+  // assurance: rolling truck ratio
+  if(stats.pass>30){
+    var ratio = stats.truck/stats.pass;
+    if(ratio<0.095){driftStreak++;}else{driftStreak=Math.max(0,driftStreak-3);}
+    if(driftStreak>40 && !alertOn){alertOn=true;raiseAlert(ratio);}
+    if(driftStreak<=40 && alertOn && !drift){alertOn=false;clearAlert();}
+  }
+}
+function raiseAlert(ratio){
+  $('alert').classList.add('show');
+  $('alertText').textContent='Classification sensor on lane 2 mis-binning heavy vehicles. Truck ratio '+(ratio*100).toFixed(1)+'% vs expected ~15%. Flagged from passage data — the road still reads healthy.';
+  var h=$('hHealth');h.textContent='FAULT';h.className='hud__val bad';
+  logLine(null,null,false,'ASSURANCE: truck-class ratio breached lower bound — silent classification drift, lane 2. RCA raised.');
+}
+function clearAlert(){$('alert').classList.remove('show');var h=$('hHealth');h.textContent='NOMINAL';h.className='hud__val good';}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // road
+  ctx.fillStyle='rgba(255,255,255,0.02)';ctx.fillRect(0,66,W,H-100);
+  // lane dividers
+  ctx.strokeStyle='rgba(255,255,255,0.10)';ctx.lineWidth=2;ctx.setLineDash([26,26]);
+  for(var l=1;l<LANES;l++){var y=66+l*((H-100)/LANES);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.setLineDash([]);
+  // gantry
+  ctx.strokeStyle=col('--line-2');ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(gantryX,40);ctx.lineTo(gantryX,H-30);ctx.stroke();
+  ctx.fillStyle=col('--line-2');ctx.fillRect(gantryX-70,34,140,10);
+  for(var c=0;c<3;c++){ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(gantryX-50+c*50,52,4,0,7);ctx.fill();}
+  ctx.font='11px IBM Plex Mono, monospace';ctx.fillStyle=C.text3;ctx.fillText('GANTRY G-04',gantryX-40,26);
+  // vehicles
+  vehicles.forEach(function(v){
+    var y=laneY(v.lane), w=v.type==='truck'?54:v.type==='bike'?18:34, h=v.type==='truck'?20:v.type==='bike'?10:15;
+    var base = v.type==='truck'?C.orange : v.type==='bike'?C.green : C.cyan;
+    ctx.fillStyle=base;roundRect(v.x,y-h/2,w,h,4);ctx.fill();
+    // tag/plate indicator after gantry
+    if(v.done){ctx.fillStyle=v.tag?C.green:C.amber;ctx.beginPath();ctx.arc(v.x+w+7,y,3,0,7);ctx.fill();}
+    if(v.flash>0){ctx.strokeStyle='rgba(53,198,224,'+v.flash+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(gantryX,y,22*(1.4-v.flash),0,7);ctx.stroke();}
+  });
+  // scan line at gantry
+  if(!reduce){ctx.fillStyle='rgba(242,101,34,0.10)';ctx.fillRect(gantryX-2,40,4,H-70);}
+}
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+
+/* throughput mini chart */
+var tc=$('throughput'), tctx=tc.getContext('2d'), TW=520, TH=120;
+function drawChart(){
+  tctx.clearRect(0,0,TW,TH);
+  var max=Math.max(6,Math.max.apply(null,history));
+  tctx.strokeStyle=C.cyan;tctx.lineWidth=2;tctx.beginPath();
+  history.forEach(function(v,i){var x=i/(history.length-1)*TW, y=TH-8-(v/max)*(TH-20);if(i===0)tctx.moveTo(x,y);else tctx.lineTo(x,y);});
+  tctx.stroke();
+  // area
+  tctx.lineTo(TW,TH);tctx.lineTo(0,TH);tctx.closePath();
+  var g=tctx.createLinearGradient(0,0,0,TH);g.addColorStop(0,'rgba(53,198,224,0.22)');g.addColorStop(1,'rgba(53,198,224,0)');tctx.fillStyle=g;tctx.fill();
+}
+
+/* class mix bars */
+function drawMix(){
+  var tot=stats.car+stats.truck+stats.bike||1;
+  var pc=Math.round(stats.car/tot*100),pt=Math.round(stats.truck/tot*100),pb=Math.round(stats.bike/tot*100);
+  $('mCar').style.width=pc+'%';$('pCar').textContent=pc+'%';
+  $('mTruck').style.width=pt+'%';$('pTruck').textContent=pt+'%';
+  $('mBike').style.width=pb+'%';$('pBike').textContent=pb+'%';
+}
+
+/* HUD */
+function drawHUD(){
+  $('hPass').textContent=stats.pass.toLocaleString();
+  $('hRev').textContent='$'+Math.round(stats.rev).toLocaleString();
+  var tag=stats.pass?Math.round(stats.tagReads/stats.pass*100):0;
+  var th=$('hTag');th.textContent=tag+'%';th.className='hud__val '+(tag>82?'good':tag>72?'warn':'bad');
+  var eh=$('hExc');eh.textContent=stats.exc.toLocaleString();eh.className='hud__val '+(alertOn?'bad':stats.exc>stats.pass*0.12?'warn':'');
+}
+
+/* terminal log */
+var term=$('term'), lines=[];
+function ts(){var d=new Date();return d.toTimeString().slice(0,8);}
+function logLine(v,reported,flag,custom){
+  var html;
+  if(custom){html='<span class="ts">'+ts()+'</span> <span class="crit">'+custom+'</span>';}
+  else{
+    var lane='L'+((v.lane||0)+1), read=v.tag?'DSRC tag':'ANPR plate';
+    if(flag) html='<span class="ts">'+ts()+'</span> <span class="flag">EXC</span> '+lane+' '+read+' · class='+reported+' · reconcile mismatch → exception queue';
+    else html='<span class="ts">'+ts()+'</span> <span class="ok">OK </span> '+lane+' '+read+' · class='+reported+' · txn posted';
+  }
+  lines.push(html);if(lines.length>9)lines.shift();
+  term.innerHTML=lines.join('<br>');
+}
+
+/* loop */
+var acc=0;
+function loop(){
+  if(running){step();acc++;}
+  draw();
+  if(acc%4===0){drawChart();drawMix();drawHUD();}
+  requestAnimationFrame(loop);
+}
+// seed a few log lines
+for(var s=0;s<4;s++) lines.push('<span class="ts">'+ts()+'</span> <span class="ok">OK </span> system online · awaiting passages');
+term.innerHTML=lines.join('<br>');
+loop();
+
+/* controls */
+$('density').addEventListener('input',function(e){density=parseInt(e.target.value,10);});
+$('playBtn').addEventListener('click',function(){running=!running;this.textContent=running?'❚❚ Pause':'▶ Play';this.classList.toggle('is-active',running);});
+$('faultBtn').addEventListener('click',function(){
+  drift=!drift;this.classList.toggle('is-active',drift);
+  this.textContent=drift?'⚠ Drift active — clear':'⚠ Inject sensor drift';
+  if(!drift){driftStreak=0;}
+});
+})();
+</script>
+</body>
+</html>
